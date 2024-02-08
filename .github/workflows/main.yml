@@ -3,31 +3,36 @@ name: CI
 on: [push]
 
 jobs:
- build:
-  name: Build
-  runs-on: ubuntu-latest
-  steps:
-   - uses: actions/checkout@v1
-   - name: Install Nodejs
-     uses: actions/setup-node@v1
-     with:
-	node-version: 14.x
-   - name: Install nodejs dependencies
-     run: |
-	yarn
-   - name: Run Webpack Build
-     run: |
-	yarn production
-   - name: Commit
-     run: |
-	git config --local user.name "febriaricandra"
-	git config --local user.email "febriaricandraproduction@gmail.com"
-	git add .
-	git commit -m "[AUTO:BUILD] build from main.js"
-   - name: Push
-     uses: ad-m/github-push-action@master
-     with: 
-	github_token: ${{ secrets.TOKEN }}
-	branch: "master"
-	repository: "febriaricandra/node-ci"
-
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      
+      - name: Install Node.js Dependencies
+        run: |
+          yarn
+          
+      - name: Run Webpack Build
+        run: |
+          yarn production
+          
+      - name: Commit
+        run: |
+          git config --local user.name "febriaricandra"
+          git config --local user.email "febriaricandraproduction@gmail.com"
+          git add .
+          git commit -m "[AUTO:BUILD] build from main.js"
+      
+      - name: Push Changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          branch: "master"
+          repository: "febriaricandra/node-ci"
